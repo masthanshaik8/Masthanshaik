@@ -1,0 +1,97 @@
+## step1 : import the libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn import metrics
+
+## load the dataset
+gold_data = pd.read_csv('gld_price_data.csv')
+gold_data
+
+gold_data.shape
+
+gold_data.info()
+
+# step2 : cleaning the data
+# checking the number of missing values
+gold_data.isnull().sum()
+
+# getting the statistical measures of the data
+gold_data.describe()
+
+gold_data.drop('Date',axis=1,inplace=True)
+
+# check the corelation bteween the columns
+correlation = gold_data.corr()
+correlation
+
+# constructing a heatmap to understand the correlatiom
+ plt.figure(figsize = (8,8))
+ sns.heatmap(correlation, cbar=True, square=True, fmt='.1f',annot=True,annot_kws={'size':8}, cmap='Blues')
+
+# correlation values of GLD
+print(correlation['GLD'])
+
+# checking the distribution of the GLD Price
+sns.distplot(gold_data['GLD'],color='green')
+
+# step3: splitting the data 
+X = gold_data.drop('GLD',axis=1)
+Y = gold_data['GLD']
+print(X)
+print(Y)
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2,random_state=2)
+
+X_test
+
+# Step4: Train the Model using Random Forest Regressor
+
+regressor = RandomForestRegressor(n_estimators=100)
+regressor
+
+# training the model
+regressor.fit(X_train,Y_train)
+
+# prediction on Test Data
+test_data_prediction = regressor.predict(X_test)
+test_data_prediction
+
+# R squared error
+error_score = metrics.r2_score(Y_test, test_data_prediction)
+print("R squared error : ", error_score)
+
+# train the model using linear regression
+from sklearn.linear_model import LinearRegression
+
+lr_model=LinearRegression()
+lr_model
+
+lr_model.fit(X_train,Y_train)
+
+# prediction on Test Data
+test_data_prediction = lr_model.predict(X_test)
+test_data_prediction
+
+ # R squared error
+error_score = metrics.r2_score(Y_test, test_data_prediction)
+print("R squared error : ", error_score)
+
+# conclusion: we trained using linear regession and random forest ,
+# based on r squared error random forest algorithem is performing better 
+# compared to linear regression
+
+Y_test = list(Y_test)
+
+plt.plot(Y_test, color='blue', label = 'Actual Value')
+plt.plot(test_data_prediction, color='green', label='Predicted Value')
+plt.title('Actual Price vs Predicted Price')
+plt.xlabel('Number of values')
+plt.ylabel('GLD Price')
+plt.legend()
+plt.show()

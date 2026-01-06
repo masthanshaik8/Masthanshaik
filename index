@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>Gold Price (GLD) Prediction</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .output {
+            margin-top: 20px;
+            background: #e9ffe9;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Gold Price (GLD) Prediction</h2>
+    <p>Enter the market indicators (SPX, USO, SLV, EUR/USD) to predict GLD price</p>
+
+    <form action="/predict" method="POST">
+
+        <label>SPX</label>
+        <input type="number" step="0.01" name="spx" required>
+
+        <label>USO</label>
+        <input type="number" step="0.01" name="uso" required>
+
+        <label>SLV</label>
+        <input type="number" step="0.01" name="slv" required>
+
+        <label>EUR/USD</label>
+        <input type="number" step="0.01" name="eurusd" required>
+
+        <button type="submit">Predict GLD Price</button>
+    </form>
+
+    {% if prediction_text %}
+    <div class="output">
+        {{ prediction_text }}
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
